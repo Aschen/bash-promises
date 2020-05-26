@@ -14,7 +14,7 @@ run_promise () {
   promises=$((promises+1))
 }
 
-wait_promises () {
+await_promises () {
   local resolved=0
 
   until [ $resolved -eq 2 ]
