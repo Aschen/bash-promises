@@ -1,31 +1,65 @@
 #!/bin/sh
 
+# Init the promise library.
+#
+# {param} mode - Set to "strict" to terminate the program if a promise fail (like set -e)
 init_promises () {
+  catch_mode=$1
+
   promises=0
   rm -rf /tmp/promise_*
+  rm -rf /tmp/resolve_*
+  rm -rf /tmp/reject_*
 }
 
-run_promise () {
-  local command=$1
-  local then=$2
-  local catch=$3
+# Run a command in a subprocess
+#
+# Example: promise_run echo "Hello, world"
+#
+# {return} - Returns the promise ID
+promise_run () {
+  local command=$@
 
   local identifier=$promises
   local lockfile=/tmp/promise_$identifier
+  local resolve=/tmp/resolve_$identifier
+  local reject=/tmp/reject_$identifier
 
   test -f $lockfile && rm $lockfile
-
   eval $command \
     && [[ $? -eq 0 ]] \
-      && eval $then \
-      || eval $catch \
-    && touch $lockfile || touch $lockfile &
+    && (test -f $resolve && eval "$(cat $resolve)" && touch $lockfile || touch $lockfile) \
+    || (test -f $reject && eval "$(cat $reject)" && touch $lockfile || touch $lockfile) \
+    &
 
   promises=$((promises+1))
 
   return $identifier
 }
 
+promise_then () {
+  local identifier=$?
+  local command=$@
+
+  local resolve=/tmp/resolve_$identifier
+
+  echo "$command" > $resolve
+
+  return $identifier
+}
+
+promise_catch () {
+  local identifier=$?
+  local command=$@
+
+  local reject=/tmp/reject_$identifier
+
+  echo "$command" > $reject
+
+  return $identifier
+}
+
+# Wait for every current promises to be fulfilled
 await_promises () {
   local resolved=0
 
@@ -44,6 +78,7 @@ await_promises () {
   done
 }
 
+# Wait for the last executed promise to be fulfilled
 await_promise () {
   local lockfile=/tmp/promise_$?
   local resolved=0
