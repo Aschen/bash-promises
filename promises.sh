@@ -1,5 +1,12 @@
 #!/bin/sh
 
+################################################################################
+#
+#      Bash Promise library
+#      https://github.com/Aschen/bash-promises
+#
+################################################################################
+
 # Init the promise library.
 #
 # {param} mode - Set to "strict" to terminate the program if a promise fail (like set -e)
