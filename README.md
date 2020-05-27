@@ -21,7 +21,7 @@ promise_run echo "start A"
 
 ```
 
-[See more examples](./examples.sh)
+[See more examples](./example.sh)
 
 ## API
 
