@@ -15,7 +15,7 @@ source promises.sh
 init_promises
 
 # Run a promise: promise_run <...command>
-promise_run "echo start A"
+promise_run echo "start A"
   promise_then echo "Success A"
   promise_catch echo "Failure A"
 
