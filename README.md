@@ -30,7 +30,7 @@ promise_run "echo start A"
 Initialize the promise library.  
 This function should be called before using the library.
 
-It can be called with `"strict"` to terminate the script if any promise fail.  
+It can be called with `"strict"` to terminate the script and every child commands if any promise fail.  
 This behavior is similar to `set -e`.
 
 ```bash
