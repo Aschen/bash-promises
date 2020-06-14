@@ -1,10 +1,6 @@
 # Bash promise
 
-Today servers have more and more processors but bash scripts remain completely synchronous for the most part.
-
-This library aims to bring asynchronous management routines to your bash scripts to take full advantage of the power of your servers.
-
-Bash promise is a micro bash library composed of 6 functions allowing to execute tasks in parallel in a bash script using promises.
+Bash promise is a micro bash library composed of 6 functions allowing to execute tasks in parallel in a bash script using promise-like API.
 
 ```bash
 #!/bin/bash
